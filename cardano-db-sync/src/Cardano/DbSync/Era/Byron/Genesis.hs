@@ -60,9 +60,9 @@ insertValidateGenesisDist backend tracer networkName cfg = do
         Left _ ->
           runExceptT $ do
             liftIO $ logInfo tracer "Inserting Byron Genesis distribution"
-            count <- lift DB.queryBlockCount
-            when (count > 0) $
-              dbSyncNodeError "insertValidateGenesisDist: Genesis data mismatch."
+            --count <- lift DB.queryBlockCount
+            --when (count > 0) $
+            --  dbSyncNodeError "insertValidateGenesisDist: Genesis data mismatch."
             void . lift $ DB.insertMeta $
                             DB.Meta
                               { DB.metaStartTime = Byron.configStartTime cfg
