@@ -33,7 +33,7 @@ import           Cardano.Prelude hiding (Meta, Nat, option, (%))
 import           Control.Tracer (Tracer)
 
 import           Cardano.BM.Data.Tracer (ToLogObject (..))
-import           Cardano.BM.Trace (Trace, appendName, logError, logInfo)
+import           Cardano.BM.Trace (Trace, appendName, logInfo)
 import qualified Cardano.BM.Trace as Logging
 
 import qualified Cardano.Chain.Genesis as Byron
@@ -243,8 +243,7 @@ dbSyncProtocols trce env metricsSetters plugin queryVar runDBThreadFunction vers
         logInfo trce "Starting chainSyncClient"
 
         when (version < minVersion) $ do
-          logError trce versionErrorMsg
-          throwIO $ ErrorCall (Text.unpack versionErrorMsg)
+          logInfo trce versionErrorMsg
 
         latestPoints <- getLatestPoints env
         currentTip <- getCurrentTipBlockNo (envDataLayer env)
