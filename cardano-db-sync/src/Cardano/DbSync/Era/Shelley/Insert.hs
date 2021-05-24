@@ -572,7 +572,9 @@ insertParamProposal
 insertParamProposal _tracer txId pp =
   void . lift . DB.insertParamProposal $
     DB.ParamProposal
-      { DB.paramProposalEpochNo = unEpochNo $ pppEpochNo pp
+      { DB.paramProposalRegisteredTxId = txId
+
+      , DB.paramProposalEpochNo = unEpochNo $ pppEpochNo pp
       , DB.paramProposalKey = pppKey pp
       , DB.paramProposalMinFeeA = fromIntegral <$> pppMinFeeA pp
       , DB.paramProposalMinFeeB = fromIntegral <$> pppMinFeeB pp
@@ -592,7 +594,20 @@ insertParamProposal _tracer txId pp =
       , DB.paramProposalProtocolMinor = fromIntegral . Shelley.pvMinor <$> pppProtocolVersion pp
       , DB.paramProposalMinUtxoValue = Generic.coinToDbLovelace <$> pppMinUtxoValue pp
       , DB.paramProposalMinPoolCost = Generic.coinToDbLovelace <$> pppMinPoolCost pp
-      , DB.paramProposalRegisteredTxId = txId
+
+      -- New for Alonzo
+
+      , DB.paramProposalAdaPerUTxOWord = Generic.coinToDbLovelace <$> pppAdaPerUTxOWord pp
+      , DB.paramProposalCostModels = Generic.renderLanguageCostModel <$> pppCostmdls pp
+      , DB.paramProposalPriceMem = Generic.coinToDbLovelace <$> pppPriceMem pp
+      , DB.paramProposalPriceStep = Generic.coinToDbLovelace <$> pppPriceStep pp
+      , DB.paramProposalMaxTxExMem = DbWord64 <$> pppMaxTxExMem pp
+      , DB.paramProposalMaxTxExSteps = DbWord64 <$> pppMaxTxExSteps pp
+      , DB.paramProposalMaxBlockExMem = DbWord64 <$> pppMaxBlockExMem pp
+      , DB.paramProposalMaxBlockExSteps = DbWord64 <$> pppMaxBlockExSteps pp
+      , DB.paramProposalMaxValSize = DbWord64 . fromIntegral <$> pppMaxValSize pp
+      , DB.paramProposalCollateralPercent = fromIntegral <$> pppCollateralPercentage pp
+      , DB.paramProposalMaxCollateralInputs = fromIntegral <$> pppMaxCollateralInputs pp
       }
 
 insertTxMetadata

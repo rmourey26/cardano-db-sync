@@ -97,9 +97,13 @@ mkProtocolInfoCardano ge =
           Consensus.ProtocolParamsMary
             { Consensus.maryProtVer = shelleyProtVer dnc
             }
+          Consensus.ProtocolParamsAlonzo
+            { Consensus.alonzoProtVer = shelleyProtVer dnc
+            }
           (dncByronToShelley dnc)
           (dncShelleyToAllegra dnc)
           (dncAllegraToMary dnc)
+          (error "Cardano.Sync.Config.Cardano.mkProtocolInfoCardano") -- (dncMaryToAlonzo dnc)
 
 
 shelleyPraosNonce :: ShelleyConfig -> Nonce
