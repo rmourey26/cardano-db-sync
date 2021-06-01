@@ -68,7 +68,7 @@ mkSyncEnv dataLayer protocolInfo network networkMagic systemStart dir = do
 mkSyncEnvFromConfig :: SyncDataLayer -> LedgerStateDir -> GenesisConfig -> IO (Either SyncNodeError SyncEnv)
 mkSyncEnvFromConfig dataLayer dir genCfg =
     case genCfg of
-      GenesisCardano _ bCfg sCfg
+      GenesisCardano _ bCfg sCfg _aCfg
         | unProtocolMagicId (Byron.configProtocolMagicId bCfg) /= Shelley.sgNetworkMagic (scConfig sCfg) ->
             pure . Left . NECardanoConfig $
               mconcat

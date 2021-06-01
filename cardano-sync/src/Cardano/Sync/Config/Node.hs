@@ -27,7 +27,6 @@ import qualified Data.Aeson as Aeson
 import           Data.Aeson.Types (Parser)
 import qualified Data.Yaml as Yaml
 
-import qualified Ouroboros.Consensus.Cardano as Consensus
 import qualified Ouroboros.Consensus.Cardano.CanHardFork as Shelley
 
 data NodeConfig = NodeConfig
@@ -37,25 +36,23 @@ data NodeConfig = NodeConfig
   , ncByronGenesisHash :: !GenesisHashByron
   , ncShelleyGenesisFile :: !GenesisFile
   , ncShelleyGenesisHash :: !GenesisHashShelley
+  , ncAlonzoGenesisFile :: !GenesisFile
+  , ncAlonzoGenesisHash :: !GenesisHashAlonzo
   , ncRequiresNetworkMagic :: !RequiresNetworkMagic
   , ncByronSotfwareVersion :: !Byron.SoftwareVersion
   , ncByronProtocolVersion :: !Byron.ProtocolVersion
 
   -- Shelley hardfok parameters
   , ncShelleyHardFork :: !Shelley.TriggerHardFork
-  , ncByronToShelley :: !ByronToShelley
 
   -- Allegra hardfok parameters
   , ncAllegraHardFork :: !Shelley.TriggerHardFork
-  , ncShelleyToAllegra :: !ShelleyToAllegra
 
   -- Mary hardfok parameters
   , ncMaryHardFork :: !Shelley.TriggerHardFork
-  , ncAllegraToMary :: !AllegraToMary
 
   -- Alonzo hardfok parameters
   , ncAlonzoHardFork :: !Shelley.TriggerHardFork
-  , ncMaryToAlonzo :: !MaryToAlonzo
   }
 
 parseNodeConfig :: ByteString -> NodeConfig
@@ -79,21 +76,19 @@ instance FromJSON NodeConfig where
           <*> fmap GenesisHashByron (o .: "ByronGenesisHash")
           <*> fmap GenesisFile (o .: "ShelleyGenesisFile")
           <*> fmap GenesisHashShelley (o .: "ShelleyGenesisHash")
+          <*> fmap GenesisFile (o .: "AlonzoGenesisFile")
+          <*> fmap GenesisHashAlonzo (o .: "AlonzoGenesisHash")
           <*> o .: "RequiresNetworkMagic"
           <*> parseByronSoftwareVersion o
           <*> parseByronProtocolVersion o
 
           <*> parseShelleyHardForkEpoch o
-          <*> (Consensus.ProtocolTransitionParamsShelleyBased () <$> parseShelleyHardForkEpoch o)
 
           <*> parseAllegraHardForkEpoch o
-          <*> (Consensus.ProtocolTransitionParamsShelleyBased () <$> parseAllegraHardForkEpoch o)
 
           <*> parseMaryHardForkEpoch o
-          <*> (Consensus.ProtocolTransitionParamsShelleyBased () <$> parseMaryHardForkEpoch o)
 
           <*> parseAlonzoHardForkEpoch o
-          <*> (Consensus.ProtocolTransitionParamsShelleyBased (panic "Cardano.Sync.Config.Node") <$> parseAlonzoHardForkEpoch o)
 
       parseByronProtocolVersion :: Object -> Parser Byron.ProtocolVersion
       parseByronProtocolVersion o =

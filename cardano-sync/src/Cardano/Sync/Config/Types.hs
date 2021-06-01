@@ -18,6 +18,7 @@ module Cardano.Sync.Config.Types
   , GenesisFile (..)
   , GenesisHashShelley (..)
   , GenesisHashByron (..)
+  , GenesisHashAlonzo (..)
   , SyncNodeConfig (..)
   , SyncPreConfig (..)
   , LedgerStateDir (..)
@@ -129,6 +130,8 @@ data SyncNodeConfig = SyncNodeConfig
   , dncByronGenesisHash :: !GenesisHashByron
   , dncShelleyGenesisFile :: !GenesisFile
   , dncShelleyGenesisHash :: !GenesisHashShelley
+  , dncAlonzoGenesisFile :: !GenesisFile
+  , dncAlonzoGenesisHash :: !GenesisHashAlonzo
   , dncByronSoftwareVersion :: !Byron.SoftwareVersion
   , dncByronProtocolVersion :: !Byron.ProtocolVersion
 
@@ -136,11 +139,6 @@ data SyncNodeConfig = SyncNodeConfig
   , dncAllegraHardFork :: !Shelley.TriggerHardFork
   , dncMaryHardFork :: !Shelley.TriggerHardFork
   , dncAlonzoHardFork :: !Shelley.TriggerHardFork
-
-  , dncByronToShelley :: !ByronToShelley
-  , dncShelleyToAllegra :: !ShelleyToAllegra
-  , dncAllegraToMary :: !AllegraToMary
-  , dncMaryToAlonzo :: !MaryToAlonzo
   }
 
 data SyncPreConfig = SyncPreConfig
@@ -163,6 +161,11 @@ newtype GenesisHashByron = GenesisHashByron
 newtype GenesisHashShelley = GenesisHashShelley
   { unGenesisHashShelley :: Crypto.Hash Crypto.Blake2b_256 ByteString
   } deriving newtype (Eq, Show)
+
+newtype GenesisHashAlonzo = GenesisHashAlonzo
+  { unGenesisHashAlonzo :: Crypto.Hash Crypto.Blake2b_256 ByteString
+  } deriving newtype (Eq, Show)
+
 
 newtype LedgerStateDir = LedgerStateDir
   {  unLedgerStateDir :: FilePath

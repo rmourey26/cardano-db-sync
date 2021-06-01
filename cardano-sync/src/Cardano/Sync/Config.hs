@@ -86,6 +86,8 @@ coalesceConfig pcfg ncfg adjustGenesisPath = do
           , dncByronGenesisHash = ncByronGenesisHash ncfg
           , dncShelleyGenesisFile = adjustGenesisFilePath adjustGenesisPath (ncShelleyGenesisFile ncfg)
           , dncShelleyGenesisHash = ncShelleyGenesisHash ncfg
+          , dncAlonzoGenesisFile = adjustGenesisFilePath adjustGenesisPath (ncAlonzoGenesisFile ncfg)
+          , dncAlonzoGenesisHash = ncAlonzoGenesisHash ncfg
           , dncByronSoftwareVersion = ncByronSotfwareVersion ncfg
           , dncByronProtocolVersion = ncByronProtocolVersion ncfg
 
@@ -93,11 +95,6 @@ coalesceConfig pcfg ncfg adjustGenesisPath = do
           , dncAllegraHardFork = ncAllegraHardFork ncfg
           , dncMaryHardFork = ncMaryHardFork ncfg
           , dncAlonzoHardFork = ncAlonzoHardFork ncfg
-
-          , dncByronToShelley = ncByronToShelley ncfg
-          , dncShelleyToAllegra = ncShelleyToAllegra ncfg
-          , dncAllegraToMary = ncAllegraToMary ncfg
-          , dncMaryToAlonzo = ncMaryToAlonzo ncfg
           }
 
 mkAdjustPath :: SyncPreConfig -> (FilePath -> FilePath)
