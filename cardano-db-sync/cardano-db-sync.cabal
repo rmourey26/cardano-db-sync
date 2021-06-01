@@ -110,6 +110,7 @@ library
                       , small-steps
                       , split
                       , shelley-spec-ledger
+                      , strict-containers
                       , swagger2
                       , text
                       , time

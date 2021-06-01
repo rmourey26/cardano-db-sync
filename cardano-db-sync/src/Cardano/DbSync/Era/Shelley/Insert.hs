@@ -37,8 +37,10 @@ import           Cardano.DbSync.Era.Shelley.Insert.Epoch
 import           Cardano.DbSync.Era.Shelley.Query
 import           Cardano.DbSync.Era.Util (liftLookupFail)
 
+import qualified Cardano.Ledger.BaseTypes as Shelley
 import           Cardano.Ledger.Coin (Coin (..))
 import qualified Cardano.Ledger.Coin as Shelley
+import qualified Cardano.Ledger.Keys as Shelley
 
 import           Cardano.Sync.Error
 import           Cardano.Sync.LedgerState
@@ -58,6 +60,7 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.Group (invert)
 import qualified Data.Map.Strict as Map
+import           Data.Maybe.Strict (strictMaybeToMaybe)
 import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Text
 import qualified Data.Text.Encoding.Error as Text
@@ -67,10 +70,7 @@ import           Database.Persist.Sql (SqlBackend)
 import           Ouroboros.Consensus.Cardano.Block (StandardCrypto)
 
 import qualified Shelley.Spec.Ledger.Address as Shelley
-import           Shelley.Spec.Ledger.BaseTypes (strictMaybeToMaybe)
-import qualified Shelley.Spec.Ledger.BaseTypes as Shelley
 import qualified Shelley.Spec.Ledger.Credential as Shelley
-import qualified Shelley.Spec.Ledger.Keys as Shelley
 import qualified Shelley.Spec.Ledger.PParams as Shelley
 import qualified Shelley.Spec.Ledger.TxBody as Shelley
 
