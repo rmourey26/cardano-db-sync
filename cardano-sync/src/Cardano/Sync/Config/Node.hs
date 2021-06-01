@@ -22,8 +22,6 @@ import           Cardano.Sync.Util
 
 import           Cardano.Prelude
 
--- import           Cardano.Slotting.Slot (EpochNo (..))
-
 import           Data.Aeson (FromJSON (..), Object, (.:), (.:?))
 import qualified Data.Aeson as Aeson
 import           Data.Aeson.Types (Parser)
@@ -95,7 +93,7 @@ instance FromJSON NodeConfig where
           <*> (Consensus.ProtocolTransitionParamsShelleyBased () <$> parseMaryHardForkEpoch o)
 
           <*> parseAlonzoHardForkEpoch o
-          <*> (Consensus.ProtocolTransitionParamsShelleyBased _ <$> parseAlonzoHardForkEpoch o)
+          <*> (Consensus.ProtocolTransitionParamsShelleyBased (panic "Cardano.Sync.Config.Node") <$> parseAlonzoHardForkEpoch o)
 
       parseByronProtocolVersion :: Object -> Parser Byron.ProtocolVersion
       parseByronProtocolVersion o =

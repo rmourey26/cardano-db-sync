@@ -31,6 +31,7 @@ import qualified Cardano.Binary as Serialize
 
 import qualified Cardano.Db as DB
 
+import qualified Cardano.Ledger.BaseTypes as Ledger
 import           Cardano.Ledger.Coin (Coin)
 import           Cardano.Ledger.Shelley.Constraints (UsesValue)
 import qualified Cardano.Ledger.Val as Val
@@ -85,7 +86,6 @@ import           Ouroboros.Consensus.Storage.Serialisation (DecodeDisk (..), Enc
 import           Ouroboros.Network.Block (HeaderHash, Point (..))
 import qualified Ouroboros.Network.Point as Point
 
-import qualified Shelley.Spec.Ledger.BaseTypes as Shelley
 import           Shelley.Spec.Ledger.LedgerState (AccountState, EpochState, UTxOState)
 import qualified Shelley.Spec.Ledger.LedgerState as Shelley
 import qualified Shelley.Spec.Ledger.Rewards as Shelley
@@ -120,7 +120,7 @@ data IndexCache = IndexCache
 data LedgerEnv = LedgerEnv
   { leProtocolInfo :: !(Consensus.ProtocolInfo IO CardanoBlock)
   , leDir :: !LedgerStateDir
-  , leNetwork :: !Shelley.Network
+  , leNetwork :: !Ledger.Network
   , leStateVar :: !(StrictTVar IO CardanoLedgerState)
   , leEventState :: !(StrictTVar IO LedgerEventState)
   -- The following do not really have anything to do with maintaining ledger
@@ -167,7 +167,7 @@ data LedgerStateSnapshot = LedgerStateSnapshot
 
 mkLedgerEnv :: Consensus.ProtocolInfo IO CardanoBlock
             -> LedgerStateDir
-            -> Shelley.Network
+            -> Ledger.Network
             -> SlotNo
             -> Bool
             -> IO LedgerEnv

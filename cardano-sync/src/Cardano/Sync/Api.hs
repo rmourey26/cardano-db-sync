@@ -12,6 +12,8 @@ module Cardano.Sync.Api
 
 import           Cardano.Prelude (Proxy (..), catMaybes, find)
 
+import qualified Cardano.Ledger.BaseTypes as Ledger
+
 import           Cardano.Sync.Config.Cardano
 import           Cardano.Sync.Config.Shelley
 import           Cardano.Sync.Config.Types
@@ -34,7 +36,6 @@ import           Ouroboros.Network.Block (Point (..))
 import           Ouroboros.Network.Magic (NetworkMagic (..))
 import qualified Ouroboros.Network.Point as Point
 
-import qualified Shelley.Spec.Ledger.BaseTypes as Shelley
 import qualified Shelley.Spec.Ledger.Genesis as Shelley
 
 data SyncEnv = SyncEnv
@@ -52,7 +53,7 @@ data SyncDataLayer = SyncDataLayer
   , sdlGetLatestSlotNo :: IO SlotNo
   }
 
-mkSyncEnv :: SyncDataLayer -> ProtocolInfo IO CardanoBlock -> Shelley.Network -> NetworkMagic -> SystemStart -> LedgerStateDir -> IO SyncEnv
+mkSyncEnv :: SyncDataLayer -> ProtocolInfo IO CardanoBlock -> Ledger.Network -> NetworkMagic -> SystemStart -> LedgerStateDir -> IO SyncEnv
 mkSyncEnv dataLayer protocolInfo network networkMagic systemStart dir = do
   latestSlot <- sdlGetLatestSlotNo dataLayer
   ledgerEnv <- mkLedgerEnv protocolInfo dir network latestSlot True

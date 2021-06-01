@@ -8,8 +8,9 @@ module Cardano.Sync.Era.Shelley.Generic.ProtoParams
 
 import           Cardano.Prelude
 
-import           Cardano.Ledger.Coin (Coin (..))
 import qualified Cardano.Ledger.Alonzo as Alonzo
+import           Cardano.Ledger.BaseTypes (UnitInterval)
+import           Cardano.Ledger.Coin (Coin (..))
 
 import           Cardano.Slotting.Slot (EpochNo (..))
 
@@ -23,7 +24,6 @@ import           Ouroboros.Consensus.Ledger.Extended (ExtLedgerState (..))
 import           Ouroboros.Consensus.Shelley.Ledger.Block (ShelleyBlock)
 import qualified Ouroboros.Consensus.Shelley.Ledger.Ledger as Consensus
 
-import           Shelley.Spec.Ledger.BaseTypes (UnitInterval)
 import qualified Shelley.Spec.Ledger.LedgerState as Shelley
 import           Shelley.Spec.Ledger.PParams (ProtVer)
 import qualified Shelley.Spec.Ledger.PParams as Shelley

@@ -39,6 +39,8 @@ import qualified Cardano.Db as Db
 
 import           Cardano.Ledger.Alonzo.Language (Language)
 import           Cardano.Ledger.Alonzo.Scripts (CostModel (..))
+import qualified Cardano.Ledger.BaseTypes as Ledger
+import qualified Cardano.Ledger.Keys as Ledger
 
 import           Cardano.Ledger.Coin (Coin (..), DeltaCoin)
 import qualified Cardano.Ledger.SafeHash as Ledger
@@ -51,22 +53,19 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import qualified Data.List as List
 import qualified Data.Map.Strict as Map
-import           Data.MemoBytes (MemoBytes (..))
 import qualified Data.Text.Encoding as Text
 
 import           Ouroboros.Consensus.Cardano.Block (StandardAllegra, StandardCrypto, StandardMary,
                    StandardShelley)
 
 import qualified Shelley.Spec.Ledger.Address as Shelley
-import qualified Shelley.Spec.Ledger.BaseTypes as Shelley
 import qualified Shelley.Spec.Ledger.Credential as Shelley
-import qualified Shelley.Spec.Ledger.Keys as Shelley
 import qualified Shelley.Spec.Ledger.Scripts as Shelley
 import qualified Shelley.Spec.Ledger.Tx as Shelley
 import qualified Shelley.Spec.Ledger.TxBody as Shelley
 
 
-annotateStakingCred :: Shelley.Network -> Shelley.StakeCredential era -> Shelley.RewardAcnt era
+annotateStakingCred :: Ledger.Network -> Shelley.StakeCredential era -> Shelley.RewardAcnt era
 annotateStakingCred = Shelley.RewardAcnt
 
 coinToDbLovelace :: Coin -> DbLovelace
@@ -88,22 +87,22 @@ mkSlotLeader slHash mPoolId =
                 Just _ -> "Pool-" <> short
   in Db.SlotLeader slHash mPoolId slName
 
-nonceToBytes :: Shelley.Nonce -> Maybe ByteString
+nonceToBytes :: Ledger.Nonce -> Maybe ByteString
 nonceToBytes nonce =
   case nonce of
-    Shelley.Nonce hash -> Just $ Crypto.hashToBytes hash
-    Shelley.NeutralNonce -> Nothing
+    Ledger.Nonce hash -> Just $ Crypto.hashToBytes hash
+    Ledger.NeutralNonce -> Nothing
 
 partitionMIRTargets
     :: [Shelley.MIRTarget StandardCrypto]
-    -> ([Map (Shelley.Credential 'Shelley.Staking StandardCrypto) DeltaCoin], [Coin])
+    -> ([Map (Shelley.Credential 'Ledger.Staking StandardCrypto) DeltaCoin], [Coin])
 partitionMIRTargets =
     List.foldl' foldfunc ([], [])
   where
     foldfunc
-        :: ([Map (Shelley.Credential 'Shelley.Staking StandardCrypto) DeltaCoin], [Coin])
+        :: ([Map (Shelley.Credential 'Ledger.Staking StandardCrypto) DeltaCoin], [Coin])
         -> Shelley.MIRTarget StandardCrypto
-        -> ([Map (Shelley.Credential 'Shelley.Staking StandardCrypto) DeltaCoin], [Coin])
+        -> ([Map (Shelley.Credential 'Ledger.Staking StandardCrypto) DeltaCoin], [Coin])
     foldfunc (xs, ys) mt =
       case mt of
         Shelley.StakeAddressesMIR x -> (x : xs, ys)
@@ -124,7 +123,7 @@ renderAddress
 renderAddress addr = Api.serialiseAddress (Api.fromShelleyAddr addr :: Api.AddressInEra era)
 
 renderCostModel :: CostModel -> Text
-renderCostModel (CostModelConstr x) = textShow (memotype x)
+renderCostModel (CostModel x) = textShow x
 
 renderLanguageCostModel :: Map Language CostModel -> Text
 renderLanguageCostModel mlc = textShow $ Map.map renderCostModel mlc
@@ -134,20 +133,20 @@ renderRewardAcnt = Api.serialiseAddress . Api.fromShelleyStakeAddr
 
 -- Ignore the network in the `RewardAcnt` and use the provided one instead.
 -- This is a workaround for https://github.com/input-output-hk/cardano-db-sync/issues/546
-serialiseRewardAcntWithNetwork :: Shelley.Network -> Shelley.RewardAcnt StandardCrypto -> ByteString
+serialiseRewardAcntWithNetwork :: Ledger.Network -> Shelley.RewardAcnt StandardCrypto -> ByteString
 serialiseRewardAcntWithNetwork network (Shelley.RewardAcnt _ cred) =
   Shelley.serialiseRewardAcnt $ Shelley.RewardAcnt network cred
 
-stakingCredHash :: Shelley.Network -> Shelley.StakeCredential era -> ByteString
+stakingCredHash :: Ledger.Network -> Shelley.StakeCredential era -> ByteString
 stakingCredHash network = Shelley.serialiseRewardAcnt . annotateStakingCred network
 
-unitIntervalToDouble :: Shelley.UnitInterval -> Double
-unitIntervalToDouble = fromRational . Shelley.unitIntervalToRational
+unitIntervalToDouble :: Ledger.UnitInterval -> Double
+unitIntervalToDouble = fromRational . Ledger.unitIntervalToRational
 
-unKeyHashRaw :: Shelley.KeyHash d era -> ByteString
-unKeyHashRaw (Shelley.KeyHash kh) = Crypto.hashToBytes kh
+unKeyHashRaw :: Ledger.KeyHash d era -> ByteString
+unKeyHashRaw (Ledger.KeyHash kh) = Crypto.hashToBytes kh
 
-unKeyHashView :: Shelley.KeyHash 'Shelley.StakePool StandardCrypto -> Text
+unKeyHashView :: Ledger.KeyHash 'Ledger.StakePool StandardCrypto -> Text
 unKeyHashView = Api.serialiseToBech32 . Api.StakePoolKeyHash
 
 unScriptHash :: Shelley.ScriptHash StandardCrypto -> ByteString

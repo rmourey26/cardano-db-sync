@@ -18,6 +18,8 @@ module Cardano.Sync.Types
 
 import           Cardano.Prelude hiding (Meta)
 
+import qualified Cardano.Ledger.Keys as Ledger
+
 import           Cardano.Db (PoolHashId, PoolMetaHash, PoolMetadataRefId, PoolOfflineData,
                    PoolOfflineFetchError, PoolUrl)
 
@@ -31,12 +33,10 @@ import           Data.Time.Clock.POSIX (POSIXTime)
 import           Ouroboros.Consensus.Cardano.Block (StandardCrypto)
 import           Ouroboros.Network.Block (BlockNo, Point)
 
-import qualified Shelley.Spec.Ledger.Keys as Shelley
-
 
 type CardanoPoint = Point CardanoBlock
 
-type PoolKeyHash = Shelley.KeyHash 'Shelley.StakePool StandardCrypto
+type PoolKeyHash = Ledger.KeyHash 'Ledger.StakePool StandardCrypto
 
 data BlockDetails = BlockDetails
   { bdBlock :: !CardanoBlock

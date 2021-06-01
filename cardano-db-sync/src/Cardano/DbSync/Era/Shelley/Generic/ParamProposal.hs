@@ -1,7 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeFamilies #-}
 
 module Cardano.DbSync.Era.Shelley.Generic.ParamProposal
@@ -18,7 +17,10 @@ import qualified Cardano.Ledger.Alonzo as Alonzo
 import           Cardano.Ledger.Alonzo.Language (Language)
 import qualified Cardano.Ledger.Alonzo.PParams as Alonzo
 import qualified Cardano.Ledger.Alonzo.Scripts as Alonzo
+import           Cardano.Ledger.BaseTypes (UnitInterval, strictMaybeToMaybe)
+import qualified Cardano.Ledger.BaseTypes as Ledger
 import           Cardano.Ledger.Coin (Coin)
+import qualified Cardano.Ledger.Keys as Ledger
 import           Cardano.Ledger.Shelley (ShelleyEra)
 import qualified Cardano.Ledger.ShelleyMA as ShelleyMA
 
@@ -26,9 +28,6 @@ import           Cardano.Slotting.Slot (EpochNo (..))
 
 import qualified Data.Map.Strict as Map
 
-import           Shelley.Spec.Ledger.BaseTypes (UnitInterval, strictMaybeToMaybe)
-import qualified Shelley.Spec.Ledger.BaseTypes as Shelley
-import qualified Shelley.Spec.Ledger.Keys as Shelley
 import qualified Shelley.Spec.Ledger.PParams as Shelley
 
 data ParamProposal = ParamProposal
@@ -47,7 +46,7 @@ data ParamProposal = ParamProposal
   , pppMonetaryExpandRate :: !(Maybe UnitInterval)
   , pppTreasuryGrowthRate :: !(Maybe UnitInterval)
   , pppDecentralisation :: !(Maybe UnitInterval)
-  , pppEntropy :: !(Maybe Shelley.Nonce)
+  , pppEntropy :: !(Maybe Ledger.Nonce)
   , pppProtocolVersion :: !(Maybe Shelley.ProtVer)
   , pppMinUtxoValue :: !(Maybe Coin)
   , pppMinPoolCost :: !(Maybe Coin)
@@ -90,7 +89,7 @@ shelleyParamProposal epochNo (Shelley.ProposedPPUpdates umap) =
 
 -- -------------------------------------------------------------------------------------------------
 
-convertAlonzoParamProposal :: EpochNo -> (Shelley.KeyHash genesis crypto, Alonzo.PParamsUpdate era) -> ParamProposal
+convertAlonzoParamProposal :: EpochNo -> (Ledger.KeyHash genesis crypto, Alonzo.PParamsUpdate era) -> ParamProposal
 convertAlonzoParamProposal  epochNo (key, pmap) =
   ParamProposal
     { pppEpochNo = epochNo
@@ -127,7 +126,7 @@ convertAlonzoParamProposal  epochNo (key, pmap) =
     , pppMaxCollateralInputs = strictMaybeToMaybe (Alonzo._maxCollateralInputs pmap)
     }
 
-convertShelleyParamProposal :: EpochNo -> (Shelley.KeyHash genesis crypto, Shelley.PParams' Shelley.StrictMaybe era) -> ParamProposal
+convertShelleyParamProposal :: EpochNo -> (Ledger.KeyHash genesis crypto, Shelley.PParams' Ledger.StrictMaybe era) -> ParamProposal
 convertShelleyParamProposal epochNo (key, pmap) =
   ParamProposal
     { pppEpochNo = epochNo

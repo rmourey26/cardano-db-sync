@@ -92,12 +92,12 @@ coalesceConfig pcfg ncfg adjustGenesisPath = do
           , dncShelleyHardFork = ncShelleyHardFork ncfg
           , dncAllegraHardFork = ncAllegraHardFork ncfg
           , dncMaryHardFork = ncMaryHardFork ncfg
-          , dncAlonzoHardFork = ncAlonzoHardFork ncfg -- panic "Cardano.Sync.Config.coalesceConfig"
+          , dncAlonzoHardFork = ncAlonzoHardFork ncfg
 
           , dncByronToShelley = ncByronToShelley ncfg
           , dncShelleyToAllegra = ncShelleyToAllegra ncfg
           , dncAllegraToMary = ncAllegraToMary ncfg
-          , dncMaryToAlonzo = ncMaryRoAlonzo ncfg -- panic "Cardano.Sync.Config.coalesceConfig"
+          , dncMaryToAlonzo = ncMaryToAlonzo ncfg
           }
 
 mkAdjustPath :: SyncPreConfig -> (FilePath -> FilePath)
