@@ -28,7 +28,7 @@ import           Cardano.DbSync.Era.Shelley.Generic.ParamProposal
 import           Cardano.DbSync.Era.Shelley.Generic.Witness
 
 import           Cardano.Ledger.Alonzo ()
-import           Cardano.Ledger.Alonzo.Tx
+import           Cardano.Ledger.Alonzo.Tx (ValidatedTx (..))
 import qualified Cardano.Ledger.Alonzo.TxBody as Alonzo
 import           Cardano.Ledger.Coin (Coin (..))
 import qualified Cardano.Ledger.Core as Ledger

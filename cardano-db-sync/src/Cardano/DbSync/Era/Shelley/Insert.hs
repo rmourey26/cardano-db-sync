@@ -540,11 +540,11 @@ insertPoolRelay updateId relay =
       Shelley.SingleHostAddr mPort mIpv4 mIpv6 ->
         DB.PoolRelay -- An IPv4 and/or IPv6 address
           { DB.poolRelayUpdateId = updateId
-          , DB.poolRelayIpv4 = textShow <$> Shelley.strictMaybeToMaybe mIpv4
-          , DB.poolRelayIpv6 = textShow <$> Shelley.strictMaybeToMaybe mIpv6
+          , DB.poolRelayIpv4 = textShow <$> strictMaybeToMaybe mIpv4
+          , DB.poolRelayIpv6 = textShow <$> strictMaybeToMaybe mIpv6
           , DB.poolRelayDnsName = Nothing
           , DB.poolRelayDnsSrvName = Nothing
-          , DB.poolRelayPort = Shelley.portToWord16 <$> Shelley.strictMaybeToMaybe mPort
+          , DB.poolRelayPort = Shelley.portToWord16 <$> strictMaybeToMaybe mPort
           }
       Shelley.SingleHostName mPort name ->
         DB.PoolRelay -- An A or AAAA DNS record
@@ -553,7 +553,7 @@ insertPoolRelay updateId relay =
           , DB.poolRelayIpv6 = Nothing
           , DB.poolRelayDnsName = Just (Shelley.dnsToText name)
           , DB.poolRelayDnsSrvName = Nothing
-          , DB.poolRelayPort = Shelley.portToWord16 <$> Shelley.strictMaybeToMaybe mPort
+          , DB.poolRelayPort = Shelley.portToWord16 <$> strictMaybeToMaybe mPort
           }
       Shelley.MultiHostName name ->
         DB.PoolRelay -- An SRV DNS record
