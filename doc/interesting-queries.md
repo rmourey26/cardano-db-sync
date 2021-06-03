@@ -138,6 +138,26 @@ select tx_out.* from tx_out
  2195714 | 996126 |     4 | DdzFFzCqrh...dtq1FQQSCN | 158685237964 | \x82d8185842...1a330b42df |
 ```
 
+### Benchmark results for each epoch with some additional info:
+```sql
+with perEpoch as 
+  (
+    select block.epoch_no as epoch, count(tx) as tx_count, sum(tx.size) as sum_tx_size, count(reward) as reward_count, count(epoch_stake) as stake_count 
+    from block join tx on tx.block_id = block.id 
+    left join reward on reward.epoch_no = block.epoch_no
+    left join epoch_stake on epoch_stake.epoch_no = block.epoch_no
+    group by block.epoch_no 
+  ) 
+select epoch_sync_time.no as epoch, epoch_sync_time.seconds as seconds, tx_count, sum_tx_size, reward_count, stake_count, epoch_sync_time.state 
+from epoch_sync_time join perEpoch on perEpoch.epoch = epoch_sync_time.no;
+epoch |    seconds    | tx_count | sum_tx_size | reward_count | stake_count |  state  
+-------+---------------+----------+-------------+--------------+-------------+---------
+     0 |               |       33 |        6093 |            0 |           0 | lagging
+     1 |  44.139375742 |    12870 |     2256995 |            0 |           0 | lagging
+     2 |  38.970647309 |     4292 |      830307 |            0 |           0 | lagging
+
+```
+
 ### Transaction withdrawals for specified transaction hash:
 Withdrawals are a feature of some transactions of the Shelley era and later.
 
