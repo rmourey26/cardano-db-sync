@@ -9,9 +9,9 @@ module Cardano.Sync.Era.Shelley.Generic.ProtoParams
 import           Cardano.Prelude
 
 import qualified Cardano.Ledger.Alonzo as Alonzo
+import qualified Cardano.Ledger.Alonzo.PParams as Alonzo
 import           Cardano.Ledger.BaseTypes (UnitInterval)
 import           Cardano.Ledger.Coin (Coin (..))
-
 import           Cardano.Slotting.Slot (EpochNo (..))
 
 import           Cardano.Sync.Types
@@ -76,7 +76,26 @@ shelleyProtoParams =
 -- -------------------------------------------------------------------------------------------------
 
 fromAlonzoParams :: Alonzo.PParams (Alonzo.AlonzoEra StandardCrypto) -> ProtoParams
-fromAlonzoParams = panic "Cardano.Sync.Era.Shelley.Generic.ProtoParams.fromAlonzoParams"
+fromAlonzoParams params =
+  ProtoParams
+    { ppMinfeeA = Alonzo._minfeeA params
+    , ppMinfeeB = Alonzo._minfeeB params
+    , ppMaxBBSize = Alonzo._maxBBSize params
+    , ppMaxTxSize = Alonzo._maxTxSize params
+    , ppMaxBHSize = Alonzo._maxBHSize params
+    , ppKeyDeposit = Alonzo._keyDeposit params
+    , ppPoolDeposit = Alonzo._poolDeposit params
+    , ppMaxEpoch = Alonzo._eMax params
+    , ppOptialPoolCount = Alonzo._nOpt params
+    , ppInfluence = Alonzo._a0 params
+    , ppMonetaryExpandRate = Alonzo._rho params
+    , ppTreasuryGrowthRate = Alonzo._tau params
+    , ppDecentralisation  = Alonzo._d params
+    , ppExtraEntropy = Alonzo._extraEntropy params
+    , ppProtocolVersion = Alonzo._protocolVersion params
+    , ppMinUTxOValue = Alonzo._adaPerUTxOWord params
+    , ppMinPoolCost = Alonzo._minPoolCost params
+    }
 
 fromShelleyParams :: Shelley.PParams' Identity era -> ProtoParams
 fromShelleyParams params =
